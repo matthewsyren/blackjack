@@ -1,0 +1,43 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0099cc"
+    tools:context="a15008377.opsc7311_assign1_15008377.HomeActivity"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/button_play"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/play_button"
+        android:textSize="@dimen/home_activity_text_size"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/button_vertical_margin"
+        android:layout_marginLeft="@dimen/button_horizontal_margin"
+        android:layout_marginRight="@dimen/button_horizontal_margin"
+        android:onClick="startGame"/>
+
+    <Button
+        android:id="@+id/button_how_to_play"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/how_to_play_button"
+        android:textSize="@dimen/home_activity_text_size"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/button_horizontal_margin"
+        android:layout_marginRight="@dimen/button_horizontal_margin"/>
+
+    <Button
+        android:id="@+id/button_statistics"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/statistics_button"
+        android:textSize="@dimen/home_activity_text_size"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/button_vertical_margin"
+        android:layout_marginLeft="@dimen/button_horizontal_margin"
+        android:layout_marginRight="@dimen/button_horizontal_margin"/>
+</RelativeLayout>

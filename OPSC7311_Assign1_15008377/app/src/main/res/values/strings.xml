@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Blackjack</string>
+    <string name="play_button">PLAY</string>
+    <string name="how_to_play_button">HOW TO PLAY</string>
+    <string name="statistics_button">STATISTICS</string>
+    <string name="hit_button">HIT</string>
+    <string name="stay_button">STAY</string>
+</resources>

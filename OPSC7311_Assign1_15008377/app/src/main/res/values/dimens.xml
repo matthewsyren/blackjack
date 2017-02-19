@@ -1,0 +1,14 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">20dp</dimen>
+    <dimen name="button_horizontal_margin">30dp</dimen>
+    <dimen name="button_vertical_margin">30dp</dimen>
+    <dimen name="home_activity_text_size">40sp</dimen>
+    <dimen name="game_activity_text_size">25sp</dimen>
+    <dimen name="game_activity_button_width">150dp</dimen>
+    <dimen name="game_activity_actions_layout_height">150dp</dimen>
+    <dimen name="card_width">75dp</dimen>
+    <dimen name="card_height">100dp</dimen>
+    <dimen name="card_padding">10dp</dimen>
+</resources>
