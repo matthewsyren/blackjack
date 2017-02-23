@@ -32,6 +32,7 @@ public class CardAdapter extends ArrayAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         //Component assignments
         LayoutInflater inflater = ((Activity)context).getLayoutInflater();
+        convertView = inflater.inflate(R.layout.card, null);
         image = (ImageView) convertView.findViewById(R.id.individual_card);
 
         //Assigns the next item in the lstImages ArrayList to a card
