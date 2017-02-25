@@ -5,4 +5,6 @@
     <string name="statistics_button">STATISTICS</string>
     <string name="hit_button">HIT</string>
     <string name="stay_button">STAY</string>
+    <string name="user_hand_label">Your Hand</string>
+    <string name="dealer_hand_label">Dealer\'s Hand</string>
 </resources>
