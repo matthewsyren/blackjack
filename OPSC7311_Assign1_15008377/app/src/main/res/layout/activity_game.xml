@@ -70,7 +70,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:textSize="@dimen/game_activity_text_size"
-            android:text="@string/user_hand_label"/>
+            android:text="@string/user_hand_label"
+            android:textColor="#000000"/>
 
         <GridView
             android:id="@+id/hand_of_cards"
