@@ -1,13 +1,16 @@
 package a15008377.opsc7311_assign1_15008377;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -29,52 +32,79 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-       // displayInputMessage("Please enter a username for yourself");
+        toggleButtons(false);
+        displayInputMessage("Please enter a username for yourself");
+    }
+
+    //Method either enables or disables buttons, depending on the value of the boolean that is passed in
+    public void toggleButtons(boolean enabled){
+        //Button assignments
+        Button btnPlayGame = (Button) findViewById(R.id.button_play);
+        Button btnHowToPlay = (Button) findViewById(R.id.button_how_to_play);
+        Button btnStatistics = (Button) findViewById(R.id.button_statistics);
+
+        //Toggles buttons' state
+        btnPlayGame.setEnabled(enabled);
+        btnHowToPlay.setEnabled(enabled);
+        btnStatistics.setEnabled(enabled);
     }
 
     //Method displays an AlertDialog to get a username from the user
     public void displayInputMessage(String message){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(message);
+        SharedPreferences preferences = getSharedPreferences("", Context.MODE_PRIVATE);
+        if(preferences.getString("username", null) == null){
+            AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+            alertDialog.setTitle(message);
 
-        //Adds EditText to AlertDialog
-        final EditText input = new EditText(this);
-        input.setInputType(InputType.TYPE_CLASS_TEXT);
-        builder.setView(input);
+            //Adds EditText to AlertDialog
+            final EditText input = new EditText(this);
+            input.setInputType(InputType.TYPE_CLASS_TEXT);
+            alertDialog.setView(input);
 
-        //Adds confirmation button
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String username = input.getText().toString();
-                boolean valid = true;
-                if(username.length() == 0){
-                    valid = false;
-                }
-                for(int i = 0; i < username.length() && valid == true; i++){
-                    if(!Character.isAlphabetic(username.charAt(i))){
-                        valid = false;
+            //Creates OnClickListener for the Dialog message
+            DialogInterface.OnClickListener dialogOnClickListener = new DialogInterface.OnClickListener(){
+                @Override
+                public void onClick(DialogInterface dialog, int button) {
+                    switch(button){
+                        case AlertDialog.BUTTON_POSITIVE:
+                            String username = input.getText().toString();
+                            boolean valid = true;
+                            if(username.length() == 0){
+                                valid = false;
+                            }
+                            for(int i = 0; i < username.length() && valid == true; i++){
+                                if(!Character.isAlphabetic(username.charAt(i))){
+                                    valid = false;
+                                }
+                            }
+                            if(valid){
+                                checkUsername(username);
+                            }
+                            else{
+                                displayInputMessage("Please enter a username that only contains letters (no spaces or symbols)");
+                            }
+                            break;
                     }
                 }
-                if(valid){
-                    checkUsername(username);
-                }
-                else{
-                    displayInputMessage("Please enter a username that only contains letters (no spaces or symbols)");
-                }
-            }
-        });
+            };
 
-        builder.show();
+            //Assigns button and OnClickListener for the AlertDialog and displays the AlertDialog
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes", dialogOnClickListener);
+            alertDialog.setCanceledOnTouchOutside(false);
+            alertDialog.show();
+        }
+        else{
+            toggleButtons(true);
+        }
     }
 
     //Method checks if the desired username is taken, if it is, the user is prompted for a new username; if the username is free, the user's information is written to the database
     public void checkUsername(final String username){
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final DatabaseReference myRef = database.getReference().child(username);
+        final DatabaseReference databaseReference = database.getReference().child(username);
 
         //Checks if username is taken. If the username is taken, the user must choose a new one; if the username is not taken, the information is added to the database
-        myRef.addValueEventListener(new ValueEventListener() {
+        databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
@@ -83,14 +113,17 @@ public class HomeActivity extends AppCompatActivity {
                 }
                 else{
                     //Writes the new username's information to the Firebase Database
-                    User user = new User(0, 0);
-                    myRef.setValue(user);
+                    User user = new User();
+                    databaseReference.setValue(user);
+
+                    //Signs the user in
+                    setActiveUsername(username);
 
                     //Removes this ValueEventListener to prevent another prompt for a username once the data is written to Firebase
-                    myRef.removeEventListener(this);
+                    databaseReference.removeEventListener(this);
+                    toggleButtons(true);
                 }
             }
-
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
@@ -109,5 +142,13 @@ public class HomeActivity extends AppCompatActivity {
     public void startStatistics(View view){
         Intent intent = new Intent(this, StatisticsActivity.class);
         startActivity(intent);
+    }
+
+    //Method stores the user's username, which will keep them signed in every time they open the app
+    public void setActiveUsername(String username){
+        SharedPreferences preferences = getSharedPreferences("", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("username", username);
+        editor.commit();
     }
 }

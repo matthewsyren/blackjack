@@ -1,6 +1,7 @@
 package a15008377.opsc7311_assign1_15008377;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,16 +28,19 @@ public class StatisticsActivity extends AppCompatActivity {
         populateListView();
     }
 
+    //Method fetches the statistics for the current user and displays the statistics
     public void displayUserStatistics(){
+        SharedPreferences preferences = getSharedPreferences("", Context.MODE_PRIVATE);
+        String username = preferences.getString("username", null);
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference().child("matthewsyren");
+        DatabaseReference databaseReference = database.getReference().child(username);
         final TextView txtUserStatistics = (TextView) findViewById(R.id.text_user_statistics);
 
-        myRef.addValueEventListener(new ValueEventListener() {
+        databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
-                txtUserStatistics.setText("Games Played: " + user.gamesPlayed + "\nGames Won: " + user.gamesWon + "\nWin Rate: " + user.gamesPlayed / user.gamesWon * 100 + "%");
+                txtUserStatistics.setText("Games Played: " + user.getGamesPlayed() + "\nGames Won: " + user.getGamesWon() + "\nWin Rate: " + Math.round(determineWinRate(user.getGamesPlayed(), user.getGamesWon())) + "%");
             }
 
             @Override
@@ -47,30 +51,31 @@ public class StatisticsActivity extends AppCompatActivity {
         });
     }
 
-
-    //Method fetches all data from Firebase and sorts it, before displaying the data in the ListView
+    //Method fetches all data from FireBase and sorts it, before displaying the data in the ListView
     public void populateListView(){
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference();
         final ListView listView = (ListView) findViewById(R.id.list_best_win_rates);
         final Context context = this;
-        final ArrayList<UserRankingDetails> lstUsers = new ArrayList<>();
 
         //Adds Listeners for when the data is changed
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                ArrayList<UserRankingDetails> lstUsers = new ArrayList<>();
+
                 //Loops through all users and adds each user to the lstUsers ArrayList
                 Iterable<DataSnapshot> lstSnapshots = dataSnapshot.getChildren();
                 for(DataSnapshot snapshot : lstSnapshots){
                     String key = snapshot.getKey();
                     User user = snapshot.getValue(User.class);
-                    UserRankingDetails userRankingDetails = new UserRankingDetails(key, determineWinRate(user.gamesPlayed, user.gamesWon));
+                    UserRankingDetails userRankingDetails = new UserRankingDetails(key, determineWinRate(user.getGamesPlayed(), user.getGamesWon()));
+                    Log.i("key", key + "  " + user.getGamesPlayed() + "  " + user.getGamesWon());
                     lstUsers.add(userRankingDetails);
                 }
 
+                //Sorts the users in order of win rate, and then displays the users in the ListView
                 sortUsers(lstUsers);
-
                 ListViewAdapter adapter = new ListViewAdapter(context, lstUsers);
                 listView.setAdapter(adapter);
             }
@@ -85,27 +90,31 @@ public class StatisticsActivity extends AppCompatActivity {
 
     //Method sorts the lstUsers ArrayList by the user's win percentage in ascending order
     public void sortUsers(ArrayList<UserRankingDetails> lstUsers){
-        for(int i = 0; i < lstUsers.size(); i++){
-            double winRate1 = lstUsers.get(i).getWinRate();
-            for(int j = i + 1; j < lstUsers.size(); j++){
-                double winRate2 = lstUsers.get(j).getWinRate();
-                if(winRate1 < winRate2){
-                    UserRankingDetails tempUser = lstUsers.get(i);
-                    lstUsers.set(i,  lstUsers.get(j));
-                    lstUsers.set(j, tempUser);
+        boolean swapped = true;
+        int j = 0;
+        UserRankingDetails temp;
+        while (swapped) {
+            swapped = false;
+            j++;
+            for (int i = 0; i < lstUsers.size() - j; i++) {
+                if (lstUsers.get(i).getWinRate() < lstUsers.get(i + 1).getWinRate()) {
+                    temp = lstUsers.get(i);
+                    lstUsers.set(i, lstUsers.get(i + 1));
+                    lstUsers.set((i + 1), temp);
+                    swapped = true;
                 }
             }
         }
     }
 
     //Method calculates the win rate of the user and returns the win rate
-    public static int determineWinRate(int gamesPlayed, int gamesWon){
-        int winRate;
+    public static double determineWinRate(int gamesPlayed, int gamesWon){
+        double winRate;
         if(gamesWon == 0){
             winRate = 0;
         }
         else{
-            winRate =  gamesWon / gamesPlayed * 100;
+            winRate =  (double) gamesWon / gamesPlayed * 100;
         }
         return winRate;
     }

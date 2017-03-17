@@ -7,4 +7,6 @@
     <string name="stay_button">STAY</string>
     <string name="user_hand_label">Your Hand</string>
     <string name="dealer_hand_label">Dealer\'s Hand</string>
+    <string name="label_user_statistics">Your statistics:</string>
+    <string name="label_leader_board">Leader board:</string>
 </resources>

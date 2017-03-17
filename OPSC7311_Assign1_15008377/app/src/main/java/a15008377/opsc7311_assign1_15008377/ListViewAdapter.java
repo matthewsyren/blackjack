@@ -40,6 +40,7 @@ public class ListViewAdapter extends ArrayAdapter {
 
         txtRanking.setText((position + 1) + "");
         txtUsername.setText(lstUsers.get(position).getUsername() + "");
+        txtWinRate.setText(Math.round(lstUsers.get(position).getWinRate()) + "%");
         return convertView;
     }
 }

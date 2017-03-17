@@ -1,7 +1,9 @@
 package a15008377.opsc7311_assign1_15008377;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -270,23 +272,27 @@ public class GameActivity extends AppCompatActivity {
 
             //Determines the winner based on the user and dealers' scores
             if(userScore > 21){
-                alertDialog.setTitle("You lose!");
+                updateUserStatistics(false);
+                alertDialog.setTitle("You lose...");
                 alertDialog.setMessage("You went bust, with a score of " + userScore + ".\n\nWould you like to play again?");
             }
             else if(dealerScore > 21){
+                updateUserStatistics(true);
                 alertDialog.setTitle("YOU WIN!");
                 alertDialog.setMessage("The dealer went bust, with a score of " + dealerScore + ". \n\nWould you like to play again?");
             }
             else{
                 if(dealerScore > userScore){
-                    alertDialog.setTitle("You lose!");
+                    updateUserStatistics(false);
+                    alertDialog.setTitle("You lose...");
                 }
                 else if(userScore > dealerScore){
+                    updateUserStatistics(true);
                     alertDialog.setTitle("YOU WIN!");
                 }
                 else{
+                    updateUserStatistics(false);
                     alertDialog.setTitle("You draw!");
-
                 }
                 alertDialog.setMessage("The dealer scored " + dealerScore + ", while you scored " + userScore + ". \n\nWould you like to play again?");
             }
@@ -332,5 +338,34 @@ public class GameActivity extends AppCompatActivity {
         catch(Exception exc){
             Toast.makeText(getApplicationContext(), exc.getMessage(), Toast.LENGTH_LONG).show();
         }
+    }
+
+    //Method updates the user's statistics after each game
+    public void updateUserStatistics(final boolean win){
+        SharedPreferences preferences = getSharedPreferences("", Context.MODE_PRIVATE);
+        String username = preferences.getString("username", null);
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final DatabaseReference databaseReference = database.getReference().child(username);
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                int gamesPlayed = user.getGamesPlayed();
+                user.setGamesPlayed(++gamesPlayed);
+                if(win){
+                    int gamesWon = user.getGamesWon();
+                    user.setGamesWon(++gamesWon);
+                }
+                databaseReference.setValue(user);
+                databaseReference.removeEventListener(this);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w("FRB", "Failed to read value.", error.toException());
+            }
+        });
     }
 }
