@@ -40,4 +40,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/list_best_win_rates"/>
+    <ProgressBar
+        android:id="@+id/progress_bar_statistics"
+        android:layout_height="@dimen/progress_bar_diameter"
+        android:layout_width="@dimen/progress_bar_diameter"
+        android:indeterminate="true"
+        style="?android:attr/progressBarStyle"
+        android:layout_centerInParent="true"
+        />
 </RelativeLayout>

@@ -5,7 +5,9 @@ import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +32,12 @@ public class StatisticsActivity extends AppCompatActivity {
 
     //Method fetches the statistics for the current user and displays the statistics
     public void displayUserStatistics(){
+        //Displays the ProgressBar (which stays displayed until the data from FireBase is fetched
+        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar_statistics);
+        progressBar.setVisibility(View.VISIBLE);
+        progressBar.bringToFront();
+
+        //Fetches the data from FireBase for the current user
         SharedPreferences preferences = getSharedPreferences("", Context.MODE_PRIVATE);
         String username = preferences.getString("username", null);
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -53,6 +61,7 @@ public class StatisticsActivity extends AppCompatActivity {
 
     //Method fetches all data from FireBase and sorts it, before displaying the data in the ListView
     public void populateListView(){
+        //Fetches all users' data from FireBase
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference();
         final ListView listView = (ListView) findViewById(R.id.list_best_win_rates);
@@ -78,6 +87,10 @@ public class StatisticsActivity extends AppCompatActivity {
                 sortUsers(lstUsers);
                 ListViewAdapter adapter = new ListViewAdapter(context, lstUsers);
                 listView.setAdapter(adapter);
+
+                //Hides the ProgressBar once the data is displayed
+                ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar_statistics);
+                progressBar.setVisibility(View.INVISIBLE);
             }
 
             @Override

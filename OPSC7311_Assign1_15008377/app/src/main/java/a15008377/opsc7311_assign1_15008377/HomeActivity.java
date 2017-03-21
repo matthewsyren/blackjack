@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -32,6 +33,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        //Hides progress bar, disables the buttons and displays the input message asking for a username
         toggleButtons(false);
         displayInputMessage("Please enter a username for yourself");
     }
@@ -51,6 +53,11 @@ public class HomeActivity extends AppCompatActivity {
 
     //Method displays an AlertDialog to get a username from the user
     public void displayInputMessage(String message){
+        //Hides the ProgressBar while the user inputs their details
+        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar_home);
+        progressBar.setVisibility(View.INVISIBLE);
+
+        //Displays AlertDialog asking for the user's username is the user hasn't already set a username (the username is stored in SharedPreferences with the 'username' key)
         SharedPreferences preferences = getSharedPreferences("", Context.MODE_PRIVATE);
         if(preferences.getString("username", null) == null){
             AlertDialog alertDialog = new AlertDialog.Builder(this).create();
@@ -66,6 +73,7 @@ public class HomeActivity extends AppCompatActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int button) {
                     switch(button){
+                        //Checks if the username is valid (length > 0 and every character is an alphabetic character)
                         case AlertDialog.BUTTON_POSITIVE:
                             String username = input.getText().toString();
                             boolean valid = true;
@@ -78,9 +86,11 @@ public class HomeActivity extends AppCompatActivity {
                                 }
                             }
                             if(valid){
+                                //Checks for duplicate usernames if the username is valid
                                 checkUsername(username);
                             }
                             else{
+                                //Asks the user to enter a valid username
                                 displayInputMessage("Please enter a username that only contains letters (no spaces or symbols)");
                             }
                             break;
@@ -103,6 +113,12 @@ public class HomeActivity extends AppCompatActivity {
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference databaseReference = database.getReference().child(username);
 
+        //Displays the ProgressBar while the data is being fetched from FireBase
+        final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar_home);
+        progressBar.setVisibility(View.VISIBLE);
+        progressBar.bringToFront();
+
+
         //Checks if username is taken. If the username is taken, the user must choose a new one; if the username is not taken, the information is added to the database
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -119,9 +135,11 @@ public class HomeActivity extends AppCompatActivity {
                     //Signs the user in
                     setActiveUsername(username);
 
-                    //Removes this ValueEventListener to prevent another prompt for a username once the data is written to Firebase
+                    //Removes this ValueEventListener to prevent another prompt for a username once the data is written to FireBase
+                    progressBar.setVisibility(View.INVISIBLE);
                     databaseReference.removeEventListener(this);
                     toggleButtons(true);
+                    Toast.makeText(getApplicationContext(), "Welcome, " + username + "!", Toast.LENGTH_LONG).show();
                 }
             }
             @Override
