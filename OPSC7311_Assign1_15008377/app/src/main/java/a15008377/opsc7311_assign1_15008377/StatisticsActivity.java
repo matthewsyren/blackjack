@@ -1,11 +1,15 @@
 package a15008377.opsc7311_assign1_15008377;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.opengl.Visibility;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -26,6 +30,7 @@ public class StatisticsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statistics);
 
+        toggleLabelVisibility(View.INVISIBLE);
         displayUserStatistics();
         populateListView();
     }
@@ -39,7 +44,7 @@ public class StatisticsActivity extends AppCompatActivity {
 
         //Fetches the data from FireBase for the current user
         SharedPreferences preferences = getSharedPreferences("", Context.MODE_PRIVATE);
-        String username = preferences.getString("username", null);
+        final String username = preferences.getString("username", "");
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference databaseReference = database.getReference().child(username);
         final TextView txtUserStatistics = (TextView) findViewById(R.id.text_user_statistics);
@@ -48,7 +53,7 @@ public class StatisticsActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
-                txtUserStatistics.setText("Games Played: " + user.getGamesPlayed() + "\nGames Won: " + user.getGamesWon() + "\nWin Rate: " + Math.round(determineWinRate(user.getGamesPlayed(), user.getGamesWon())) + "%");
+                txtUserStatistics.setText("Username: " + username + "\nGames Played: " + user.getGamesPlayed() + "\nGames Won: " + user.getGamesWon() + "\nWin Rate: " + Math.round(determineWinRate(user.getGamesPlayed(), user.getGamesWon())) + "%");
             }
 
             @Override
@@ -88,9 +93,15 @@ public class StatisticsActivity extends AppCompatActivity {
                 ListViewAdapter adapter = new ListViewAdapter(context, lstUsers);
                 listView.setAdapter(adapter);
 
+
+                LayoutInflater inflater = ((Activity)context).getLayoutInflater();
+                LinearLayout linearLayout = (LinearLayout)inflater.inflate( R.layout.list_view_header, null, false );
+                listView.addHeaderView(linearLayout);
+
                 //Hides the ProgressBar once the data is displayed
                 ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar_statistics);
                 progressBar.setVisibility(View.INVISIBLE);
+                toggleLabelVisibility(View.VISIBLE);
             }
 
             @Override
@@ -130,5 +141,14 @@ public class StatisticsActivity extends AppCompatActivity {
             winRate =  (double) gamesWon / gamesPlayed * 100;
         }
         return winRate;
+    }
+
+    //Method hides or displays the labels on the Activity, depending on the value passed in as a parameter
+    public void toggleLabelVisibility(int visible){
+        TextView txtYourStatistics = (TextView) findViewById(R.id.label_user_statistics);
+        TextView txtLeaderBoard = (TextView) findViewById(R.id.label_leader_board);
+
+        txtYourStatistics.setVisibility(visible);
+        txtLeaderBoard.setVisibility(visible);
     }
 }
