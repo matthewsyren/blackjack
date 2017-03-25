@@ -35,7 +35,7 @@
             android:textSize="@dimen/game_activity_text_size"
             android:textColor="@color/blackText"
             android:onClick="hitPlayer"
-            android:background="@drawable/button"/>
+            android:background="@drawable/view_style"/>
 
         <Button
             android:id="@+id/button_stay"
@@ -47,7 +47,7 @@
             android:text="@string/stay_button"
             android:textSize="@dimen/game_activity_text_size"
             android:onClick="finishDealingDealerHand"
-            android:background="@drawable/button"/>
+            android:background="@drawable/view_style"/>
     </RelativeLayout>
     <LinearLayout
         android:layout_width="match_parent"

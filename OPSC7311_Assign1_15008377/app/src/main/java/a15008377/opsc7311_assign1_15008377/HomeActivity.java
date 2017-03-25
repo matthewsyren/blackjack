@@ -86,7 +86,8 @@ public class HomeActivity extends AppCompatActivity {
                                 }
                             }
                             if(valid){
-                                //Checks for duplicate usernames if the username is valid
+                                //Changes the username to lower case, before checking that the username hasn't been taken by another user
+                                username = username.toLowerCase();
                                 checkUsername(username);
                             }
                             else{
@@ -128,7 +129,7 @@ public class HomeActivity extends AppCompatActivity {
                     displayInputMessage(username + " is already taken, please choose another username.");
                 }
                 else{
-                    //Writes the new username's information to the Firebase Database
+                    //Writes the new username's information to the FireBase Database
                     User user = new User();
                     databaseReference.setValue(user);
 

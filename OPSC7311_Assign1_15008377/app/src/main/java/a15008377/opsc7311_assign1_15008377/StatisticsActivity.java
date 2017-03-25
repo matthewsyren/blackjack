@@ -21,6 +21,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 public class StatisticsActivity extends AppCompatActivity {
@@ -30,7 +32,7 @@ public class StatisticsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statistics);
 
-        toggleLabelVisibility(View.INVISIBLE);
+        toggleViewVisibility(View.INVISIBLE);
         displayUserStatistics();
         populateListView();
     }
@@ -101,7 +103,7 @@ public class StatisticsActivity extends AppCompatActivity {
                 //Hides the ProgressBar once the data is displayed
                 ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar_statistics);
                 progressBar.setVisibility(View.INVISIBLE);
-                toggleLabelVisibility(View.VISIBLE);
+                toggleViewVisibility(View.VISIBLE);
             }
 
             @Override
@@ -144,11 +146,15 @@ public class StatisticsActivity extends AppCompatActivity {
     }
 
     //Method hides or displays the labels on the Activity, depending on the value passed in as a parameter
-    public void toggleLabelVisibility(int visible){
+    public void toggleViewVisibility(int visible){
         TextView txtYourStatistics = (TextView) findViewById(R.id.label_user_statistics);
         TextView txtLeaderBoard = (TextView) findViewById(R.id.label_leader_board);
+        ListView lstLeaderBoard = (ListView) findViewById(R.id.list_best_win_rates);
+        TextView txtUserStatistics = (TextView) findViewById(R.id.text_user_statistics);
 
         txtYourStatistics.setVisibility(visible);
         txtLeaderBoard.setVisibility(visible);
+        txtUserStatistics.setVisibility(visible);
+        lstLeaderBoard.setVisibility(visible);
     }
 }

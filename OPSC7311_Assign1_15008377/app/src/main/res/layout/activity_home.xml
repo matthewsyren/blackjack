@@ -48,7 +48,7 @@
                 android:layout_marginLeft="@dimen/button_horizontal_margin"
                 android:layout_marginRight="@dimen/button_horizontal_margin"
                 android:onClick="startGame"
-                android:background="@drawable/button"/>
+                android:background="@drawable/view_style"/>
 
             <Button
                 android:id="@+id/button_how_to_play"
@@ -61,7 +61,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/button_horizontal_margin"
                 android:layout_marginRight="@dimen/button_horizontal_margin"
-                android:background="@drawable/button"/>
+                android:background="@drawable/view_style"/>
 
             <Button
                 android:id="@+id/button_statistics"
@@ -76,7 +76,7 @@
                 android:layout_marginLeft="@dimen/button_horizontal_margin"
                 android:layout_marginRight="@dimen/button_horizontal_margin"
                 android:onClick="startStatistics"
-                android:background="@drawable/button"/>
+                android:background="@drawable/view_style"/>
         </RelativeLayout>
     </LinearLayout>
 
