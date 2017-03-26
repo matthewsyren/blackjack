@@ -3,10 +3,8 @@ package a15008377.opsc7311_assign1_15008377;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.opengl.Visibility;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -14,14 +12,11 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -61,7 +56,7 @@ public class StatisticsActivity extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
-                Log.w("FRB", "Failed to read value.", error.toException());
+                Toast.makeText(getApplicationContext(), "Failed to read data, please check your internet connection", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -78,16 +73,15 @@ public class StatisticsActivity extends AppCompatActivity {
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                ArrayList<UserRankingDetails> lstUsers = new ArrayList<>();
+                ArrayList<LeaderBoardDetails> lstUsers = new ArrayList<>();
 
                 //Loops through all users and adds each user to the lstUsers ArrayList
                 Iterable<DataSnapshot> lstSnapshots = dataSnapshot.getChildren();
                 for(DataSnapshot snapshot : lstSnapshots){
                     String key = snapshot.getKey();
                     User user = snapshot.getValue(User.class);
-                    UserRankingDetails userRankingDetails = new UserRankingDetails(key, determineWinRate(user.getGamesPlayed(), user.getGamesWon()));
-                    Log.i("key", key + "  " + user.getGamesPlayed() + "  " + user.getGamesWon());
-                    lstUsers.add(userRankingDetails);
+                    LeaderBoardDetails leaderBoardDetails = new LeaderBoardDetails(key, determineWinRate(user.getGamesPlayed(), user.getGamesWon()));
+                    lstUsers.add(leaderBoardDetails);
                 }
 
                 //Sorts the users in order of win rate, and then displays the users in the ListView
@@ -109,16 +103,16 @@ public class StatisticsActivity extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
-                Log.w("FRB", "Failed to read value.", error.toException());
+                Toast.makeText(getApplicationContext(), "Failed to read data, please check your internet connection", Toast.LENGTH_LONG).show();
             }
         });
     }
 
     //Method sorts the lstUsers ArrayList by the user's win percentage in ascending order
-    public void sortUsers(ArrayList<UserRankingDetails> lstUsers){
+    public void sortUsers(ArrayList<LeaderBoardDetails> lstUsers){
         boolean swapped = true;
         int j = 0;
-        UserRankingDetails temp;
+        LeaderBoardDetails temp;
         while (swapped) {
             swapped = false;
             j++;

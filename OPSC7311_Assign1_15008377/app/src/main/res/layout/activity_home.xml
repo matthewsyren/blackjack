@@ -61,7 +61,8 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/button_horizontal_margin"
                 android:layout_marginRight="@dimen/button_horizontal_margin"
-                android:background="@drawable/view_style"/>
+                android:background="@drawable/view_style"
+                android:onClick="startHowToPlay"/>
 
             <Button
                 android:id="@+id/button_statistics"

@@ -8,8 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
 /**
@@ -19,10 +17,10 @@ import java.util.ArrayList;
 public class ListViewAdapter extends ArrayAdapter {
     //Declarations
     Context context;
-    ArrayList<UserRankingDetails> lstUsers;
+    ArrayList<LeaderBoardDetails> lstUsers;
 
     //Constructor
-    public ListViewAdapter(Context context, ArrayList<UserRankingDetails> lstUsers){
+    public ListViewAdapter(Context context, ArrayList<LeaderBoardDetails> lstUsers){
         super(context, R.layout.list_item_high_score, lstUsers);
         this.context = context;
         this.lstUsers = lstUsers;

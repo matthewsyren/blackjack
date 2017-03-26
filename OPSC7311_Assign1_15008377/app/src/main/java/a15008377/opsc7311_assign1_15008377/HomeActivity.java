@@ -100,7 +100,7 @@ public class HomeActivity extends AppCompatActivity {
             };
 
             //Assigns button and OnClickListener for the AlertDialog and displays the AlertDialog
-            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes", dialogOnClickListener);
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", dialogOnClickListener);
             alertDialog.setCanceledOnTouchOutside(false);
             alertDialog.show();
         }
@@ -169,5 +169,11 @@ public class HomeActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("username", username);
         editor.commit();
+    }
+
+    //Method opens the How To Play activity
+    public void startHowToPlay(View view){
+        Intent intent = new Intent(HomeActivity.this, HowToPlayActivity.class);
+        startActivity(intent);
     }
 }
