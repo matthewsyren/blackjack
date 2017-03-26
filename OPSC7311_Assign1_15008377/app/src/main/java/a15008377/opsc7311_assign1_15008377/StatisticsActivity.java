@@ -13,6 +13,8 @@ package a15008377.opsc7311_assign1_15008377;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -41,6 +43,7 @@ public class StatisticsActivity extends AppCompatActivity {
             toggleViewVisibility(View.INVISIBLE);
             displayUserStatistics();
             populateListView();
+
         }
         catch(Exception exc){
             displayToast(exc.getMessage());
@@ -72,7 +75,7 @@ public class StatisticsActivity extends AppCompatActivity {
                 @Override
                 public void onCancelled(DatabaseError error) {
                     // Failed to read value
-                    Toast.makeText(getApplicationContext(), "Failed to read data, please check your internet connection", Toast.LENGTH_LONG).show();
+                    displayToast("Failed to read data, please check your internet connection");
                 }
             });
         }
@@ -89,6 +92,11 @@ public class StatisticsActivity extends AppCompatActivity {
             DatabaseReference myRef = database.getReference();
             final ListView listView = (ListView) findViewById(R.id.list_best_win_rates);
             final Context context = this;
+
+            //Adds headings to the ListView
+            LayoutInflater inflater = ((Activity)context).getLayoutInflater();
+            LinearLayout linearLayout = (LinearLayout)inflater.inflate( R.layout.list_view_header, null, false );
+            listView.addHeaderView(linearLayout);
 
             //Adds Listeners for when the data is changed
             myRef.addValueEventListener(new ValueEventListener() {
@@ -110,11 +118,6 @@ public class StatisticsActivity extends AppCompatActivity {
                     ListViewAdapter adapter = new ListViewAdapter(context, lstUsers);
                     listView.setAdapter(adapter);
 
-
-                    LayoutInflater inflater = ((Activity)context).getLayoutInflater();
-                    LinearLayout linearLayout = (LinearLayout)inflater.inflate( R.layout.list_view_header, null, false );
-                    listView.addHeaderView(linearLayout);
-
                     //Hides the ProgressBar once the data is displayed
                     ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar_statistics);
                     progressBar.setVisibility(View.INVISIBLE);
@@ -124,7 +127,7 @@ public class StatisticsActivity extends AppCompatActivity {
                 @Override
                 public void onCancelled(DatabaseError error) {
                     // Failed to read value
-                    Toast.makeText(getApplicationContext(), "Failed to read data, please check your internet connection", Toast.LENGTH_LONG).show();
+                    displayToast("Failed to read data, please check your internet connection");
                 }
             });
         }
