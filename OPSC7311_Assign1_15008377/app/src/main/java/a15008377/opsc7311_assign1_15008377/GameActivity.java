@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -102,6 +103,7 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
+    //Method displays the hand of the appropriate player by populating the view that is passed in with the data in the ArrayList that is passed in
     public void displayHand(ArrayList<Integer> lstCards, int view){
         try{
             final CardAdapter adapter = new CardAdapter(this, lstCards);
@@ -178,6 +180,13 @@ public class GameActivity extends AppCompatActivity {
     //Method removes a card from the deckOfCards ArrayList and adds it to the ArrayList that is passed in
     public void dealCard(ArrayList<Integer> lstCards){
         try{
+            //Plays card_deal sound each time a card is dealt
+            MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.card_deal);
+            mediaPlayer.start();
+
+            //Pauses program execution until the card_deal sound has played fully
+            while (mediaPlayer.isPlaying()) {
+            }
             int cardNumber = (int) (Math.random() * deckOfCards.size());
             lstCards.add(deckOfCards.get(cardNumber));
             deckOfCards.remove(cardNumber);
