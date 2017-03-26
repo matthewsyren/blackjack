@@ -1,3 +1,14 @@
+/**
+ * Author: Matthew Syrén
+ *
+ * Date: 27 March 2017
+ *
+ * Description: The actual game play happens on this activity
+ *              The user will see their hand, the dealer's hand, and their current score
+ *              The user will be given the option to Hit (add another card) or Stay (keep their current hand) until the game ends
+ *              Once both players have had their turns, the game will determine a winner (if neither of the players have scores of over 21)
+ */
+
 package a15008377.opsc7311_assign1_15008377;
 
 import android.content.Context;
@@ -8,7 +19,6 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
@@ -20,14 +30,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
-
-/**
- * The actual game play happens on this activity
- * The user will see their hand, as well as their current score
- * The user will be given the option to Hit (add another card) or Stay (keep their current hand) until the game ends
- */
 
 public class GameActivity extends AppCompatActivity {
     //Declarations
@@ -62,7 +65,7 @@ public class GameActivity extends AppCompatActivity {
             displayHiddenDealerHand();
         }
         catch(Exception exc){
-            Toast.makeText(getApplicationContext(), exc.getMessage(), Toast.LENGTH_LONG).show();
+            displayToast(exc.getMessage());
         }
     }
 
@@ -85,7 +88,7 @@ public class GameActivity extends AppCompatActivity {
             }
         }
         catch(Exception exc){
-            Toast.makeText(getApplicationContext(), exc.getMessage(), Toast.LENGTH_LONG).show();
+            displayToast(exc.getMessage());
         }
     }
 
@@ -99,7 +102,7 @@ public class GameActivity extends AppCompatActivity {
             displayHand(dealerHiddenHand, R.id.dealer_hand_of_cards);
         }
         catch(Exception exc){
-            Toast.makeText(getApplicationContext(), exc.getMessage(), Toast.LENGTH_LONG).show();
+            displayToast(exc.getMessage());
         }
     }
 
@@ -111,7 +114,7 @@ public class GameActivity extends AppCompatActivity {
             gridView.setAdapter(adapter);
         }
         catch(Exception exc){
-            Toast.makeText(getApplicationContext(), exc.getMessage(), Toast.LENGTH_LONG).show();
+            displayToast(exc.getMessage());
         }
     }
 
@@ -173,7 +176,7 @@ public class GameActivity extends AppCompatActivity {
             deckOfCards.add(R.drawable.ace_of_spades);
         }
         catch(Exception exc){
-            Toast.makeText(getApplicationContext(), exc.getMessage(), Toast.LENGTH_LONG).show();
+            displayToast(exc.getMessage());
         }
     }
 
@@ -184,15 +187,18 @@ public class GameActivity extends AppCompatActivity {
             MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.card_deal);
             mediaPlayer.start();
 
-            //Pauses program execution until the card_deal sound has played fully
-            while (mediaPlayer.isPlaying()) {
+            //Pauses program execution until the card_deal sound has played fully (except for the first dealing where each player receives 2 cards, in order to speed up the game play)
+            if(userHand.size() >= 2 && dealerHand.size() >= 2){
+                while (mediaPlayer.isPlaying()) {
+                }
             }
+
             int cardNumber = (int) (Math.random() * deckOfCards.size());
             lstCards.add(deckOfCards.get(cardNumber));
             deckOfCards.remove(cardNumber);
         }
         catch(Exception exc){
-            Toast.makeText(getApplicationContext(), exc.getMessage(), Toast.LENGTH_LONG).show();
+            displayToast(exc.getMessage());
         }
     }
 
@@ -203,7 +209,7 @@ public class GameActivity extends AppCompatActivity {
             displayUserHand();
         }
         catch(Exception exc){
-            Toast.makeText(getApplicationContext(), exc.getMessage(), Toast.LENGTH_LONG).show();
+            displayToast(exc.getMessage());
         }
     }
 
@@ -249,7 +255,7 @@ public class GameActivity extends AppCompatActivity {
             }
         }
         catch(Exception exc){
-            Toast.makeText(getApplicationContext(), exc.getMessage(), Toast.LENGTH_LONG).show();
+            displayToast(exc.getMessage());
         }
         return score;
     }
@@ -270,7 +276,7 @@ public class GameActivity extends AppCompatActivity {
             determineWinner();
         }
         catch(Exception exc){
-            Toast.makeText(getApplicationContext(), exc.getMessage(), Toast.LENGTH_LONG).show();
+            displayToast(exc.getMessage());
         }
     }
 
@@ -332,7 +338,7 @@ public class GameActivity extends AppCompatActivity {
             alertDialog.show();
         }
         catch(Exception exc){
-            Toast.makeText(getApplicationContext(), exc.getMessage(), Toast.LENGTH_LONG).show();
+            displayToast(exc.getMessage());
         }
     }
 
@@ -345,36 +351,56 @@ public class GameActivity extends AppCompatActivity {
             btnStay.setEnabled(false);
         }
         catch(Exception exc){
-            Toast.makeText(getApplicationContext(), exc.getMessage(), Toast.LENGTH_LONG).show();
+            displayToast(exc.getMessage());
         }
     }
 
     //Method updates the user's statistics after each game
     public void updateUserStatistics(final boolean win){
-        SharedPreferences preferences = getSharedPreferences("", Context.MODE_PRIVATE);
-        String username = preferences.getString("username", null);
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final DatabaseReference databaseReference = database.getReference().child(username);
+        try{
+            SharedPreferences preferences = getSharedPreferences("", Context.MODE_PRIVATE);
+            String username = preferences.getString("username", null);
+            final FirebaseDatabase database = FirebaseDatabase.getInstance();
+            final DatabaseReference databaseReference = database.getReference().child(username);
 
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.getValue(User.class);
-                int gamesPlayed = user.getGamesPlayed();
-                user.setGamesPlayed(++gamesPlayed);
-                if(win){
-                    int gamesWon = user.getGamesWon();
-                    user.setGamesWon(++gamesWon);
+            databaseReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    //Fetches the user's current statistics from FireBase and increments the games played value
+                    User user = dataSnapshot.getValue(User.class);
+                    int gamesPlayed = user.getGamesPlayed();
+                    user.setGamesPlayed(++gamesPlayed);
+
+                    //Increments the games won value for the user if they won
+                    if(win){
+                        int gamesWon = user.getGamesWon();
+                        user.setGamesWon(++gamesWon);
+                    }
+
+                    //Pushes the new values to FireBase
+                    databaseReference.setValue(user);
+                    databaseReference.removeEventListener(this);
                 }
-                databaseReference.setValue(user);
-                databaseReference.removeEventListener(this);
-            }
 
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w("FRB", "Failed to read value.", error.toException());
-            }
-        });
+                @Override
+                public void onCancelled(DatabaseError error) {
+                    // Failed to read value
+                    displayToast("Failed to read data, please check your internet connection");
+                }
+            });
+        }
+        catch(Exception exc){
+            displayToast(exc.getMessage());
+        }
+    }
+
+    //Method displays a Toast message with the String parameter as its value
+    public void displayToast(String message){
+        try{
+            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+        }
+        catch(Exception exc){
+            displayToast(exc.getMessage());
+        }
     }
 }

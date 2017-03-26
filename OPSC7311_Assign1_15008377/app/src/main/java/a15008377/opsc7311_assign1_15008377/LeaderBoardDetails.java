@@ -1,13 +1,18 @@
-package a15008377.opsc7311_assign1_15008377;
-
 /**
- * Created by matthewsyren on 11/03/2017.
+ * Author: Matthew Syrén
+ *
+ * Date:   27 March 2017
+ *
+ * Description: This class defines the data needed to display and sort the leader board
  */
+
+package a15008377.opsc7311_assign1_15008377;
 
 public class LeaderBoardDetails {
     private String username;
     private double winRate;
 
+    //Constructor
     public LeaderBoardDetails(String username, double winRate) {
         this.username = username;
         this.winRate = winRate;

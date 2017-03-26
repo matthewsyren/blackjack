@@ -1,18 +1,24 @@
-package a15008377.opsc7311_assign1_15008377;
-
 /**
- * Created by matthewsyren on 06/03/2017.
+ * Author: Matthew Syrén
+ *
+ * Date:   27 March 2017
+ *
+ * Description: This class defines the data needed to create and read user data
  */
+
+package a15008377.opsc7311_assign1_15008377;
 
 public class User {
     private int gamesPlayed;
     private int gamesWon;
 
+    //Default constructor
     public User(){
         gamesPlayed = 0;
         gamesWon = 0;
     }
 
+    //Constructor
     public User(int gamesPlayed, int gamesWon){
         this.gamesPlayed = gamesPlayed;
         this.gamesWon = gamesWon;

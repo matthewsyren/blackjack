@@ -1,3 +1,12 @@
+/**
+ * Author: Matthew Syrén
+ *
+ * Date:   27 March 2017
+ *
+ * Description: This class is used to populate the leader board ListView with the required data
+ *              lstUsers contains the data that needs to me displayed in the ListView
+ */
+
 package a15008377.opsc7311_assign1_15008377;
 
 import android.app.Activity;
@@ -9,10 +18,6 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-
-/**
- * Created by matthewsyren on 11/03/2017.
- */
 
 public class ListViewAdapter extends ArrayAdapter {
     //Declarations
@@ -36,6 +41,7 @@ public class ListViewAdapter extends ArrayAdapter {
         TextView txtUsername = (TextView) convertView.findViewById(R.id.text_username);
         TextView txtWinRate = (TextView) convertView.findViewById(R.id.text_win_rate);
 
+        //Displays the data and adds it to the ListView
         txtRanking.setText((position + 1) + "");
         txtUsername.setText(lstUsers.get(position).getUsername() + "");
         txtWinRate.setText(Math.round(lstUsers.get(position).getWinRate()) + "%");
