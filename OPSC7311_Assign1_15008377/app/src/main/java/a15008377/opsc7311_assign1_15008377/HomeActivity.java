@@ -96,7 +96,7 @@ public class HomeActivity extends AppCompatActivity {
                                 if(username.length() == 0){
                                     valid = false;
                                 }
-                                for(int i = 0; i < username.length() && valid == true; i++){
+                                for(int i = 0; i < username.length() && valid; i++){
                                     if(!Character.isAlphabetic(username.charAt(i))){
                                         valid = false;
                                     }
@@ -213,6 +213,7 @@ public class HomeActivity extends AppCompatActivity {
     //Method opens the StatisticsActivity
     public void startStatistics(View view){
         try{
+            //Opens the Statistics Activity if there is an internet connection
             if(checkInternetConnection()){
                 Intent intent = new Intent(this, StatisticsActivity.class);
                 startActivity(intent);
@@ -229,7 +230,7 @@ public class HomeActivity extends AppCompatActivity {
             SharedPreferences preferences = getSharedPreferences("", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = preferences.edit();
             editor.putString("username", username);
-            editor.commit();
+            editor.apply();
         }
         catch(Exception exc){
             displayToast(exc.getMessage());

@@ -18,12 +18,6 @@ public class User {
         gamesWon = 0;
     }
 
-    //Constructor
-    public User(int gamesPlayed, int gamesWon){
-        this.gamesPlayed = gamesPlayed;
-        this.gamesWon = gamesWon;
-    }
-
     public int getGamesPlayed() {
         return gamesPlayed;
     }

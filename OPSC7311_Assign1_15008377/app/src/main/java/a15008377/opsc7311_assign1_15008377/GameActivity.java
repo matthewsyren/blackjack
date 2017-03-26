@@ -190,6 +190,7 @@ public class GameActivity extends AppCompatActivity {
             //Pauses program execution until the card_deal sound has played fully (except for the first dealing where each player receives 2 cards, in order to speed up the game play)
             if(userHand.size() >= 2 && dealerHand.size() >= 2){
                 while (mediaPlayer.isPlaying()) {
+                    Thread.sleep(1);
                 }
             }
 
@@ -359,7 +360,7 @@ public class GameActivity extends AppCompatActivity {
     public void updateUserStatistics(final boolean win){
         try{
             SharedPreferences preferences = getSharedPreferences("", Context.MODE_PRIVATE);
-            String username = preferences.getString("username", null);
+            String username = preferences.getString("username", "");
             final FirebaseDatabase database = FirebaseDatabase.getInstance();
             final DatabaseReference databaseReference = database.getReference().child(username);
 

@@ -21,8 +21,8 @@ import java.util.ArrayList;
 
 public class ListViewAdapter extends ArrayAdapter {
     //Declarations
-    Context context;
-    ArrayList<LeaderBoardDetails> lstUsers;
+    private Context context;
+    private ArrayList<LeaderBoardDetails> lstUsers;
 
     //Constructor
     public ListViewAdapter(Context context, ArrayList<LeaderBoardDetails> lstUsers){

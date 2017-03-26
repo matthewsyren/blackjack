@@ -21,13 +21,12 @@ import java.util.ArrayList;
 
 public class CardAdapter extends ArrayAdapter {
     //Declarations
-    Context context;
-    ImageView image;
-    ArrayList lstImages;
+    private Context context;
+    private ArrayList<Integer> lstImages;
 
     //Constructor
-    public CardAdapter(Context context, ArrayList lstImages){
-        super(context, R.layout.card,lstImages);
+    public CardAdapter(Context context, ArrayList<Integer> lstImages){
+        super(context, R.layout.card, lstImages);
         this.context = context;
         this.lstImages = lstImages;
     }
@@ -38,10 +37,10 @@ public class CardAdapter extends ArrayAdapter {
         //Component assignments
         LayoutInflater inflater = ((Activity)context).getLayoutInflater();
         convertView = inflater.inflate(R.layout.card, null);
-        image = (ImageView) convertView.findViewById(R.id.individual_card);
+        ImageView image = (ImageView) convertView.findViewById(R.id.individual_card);
 
         //Assigns the next item in the lstImages ArrayList to a card and adds it to the appropriate GridView
-        image.setImageResource((int) lstImages.get(position));
+        image.setImageResource(lstImages.get(position));
         return convertView;
     }
 }
