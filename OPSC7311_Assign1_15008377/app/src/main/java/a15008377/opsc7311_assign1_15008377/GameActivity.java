@@ -119,6 +119,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
     //Method adds all cards to the deckOfCards ArrayList
+    //The card images used were made by nicubunu on openclipart.org
     public void populateDeckOfCards() {
         try{
             deckOfCards = new ArrayList<>();
@@ -184,6 +185,7 @@ public class GameActivity extends AppCompatActivity {
     public void dealCard(ArrayList<Integer> lstCards){
         try{
             //Plays card_deal sound each time a card is dealt
+            //The sound was recorded by Kenney.nl, and was obtained from opengameart.org
             MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.card_deal);
             mediaPlayer.start();
 

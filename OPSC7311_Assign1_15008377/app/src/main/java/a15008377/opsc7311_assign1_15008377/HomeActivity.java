@@ -108,7 +108,7 @@ public class HomeActivity extends AppCompatActivity {
                                 }
                                 else{
                                     //Asks the user to enter a valid username
-                                    displayInputMessage("Please enter a username that only contains letters (no spaces or symbols)");
+                                    displayInputMessage("Please enter a username that only contains letters");
                                 }
                                 break;
                         }
@@ -185,10 +185,10 @@ public class HomeActivity extends AppCompatActivity {
         boolean connected = true;
         try{
             ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
+            NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
             //Displays a message if there is no internet connection
-            if (!(netInfo != null && netInfo.isConnected())) {
+            if (!(networkInfo != null && networkInfo.isConnected())) {
                 displayToast("Please check your internet connection...");
                 connected = false;
             }
@@ -202,8 +202,11 @@ public class HomeActivity extends AppCompatActivity {
     //Method opens the GameActivity and starts the game
     public void startGame(View view){
         try{
-            Intent intent = new Intent(this, GameActivity.class);
-            startActivity(intent);
+            //Opens the GameActivity if there is an internet connection
+            if(checkInternetConnection()){
+                Intent intent = new Intent(this, GameActivity.class);
+                startActivity(intent);
+            }
         }
         catch(Exception exc){
             displayToast(exc.getMessage());
