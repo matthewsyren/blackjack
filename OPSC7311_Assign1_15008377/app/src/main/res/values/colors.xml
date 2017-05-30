@@ -5,5 +5,6 @@
     <color name="colorAccent">#00aaff</color>
     <color name="blackText">#000000</color>
     <color name="black_overlay">#66000000</color>
-    <color name="greenBackground">#00cc0c</color>
+    <color name="greenBackground">#00CC0C</color>
+    <color name="white">#FFFFFF</color>
 </resources>

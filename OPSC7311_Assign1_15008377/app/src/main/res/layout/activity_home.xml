@@ -30,55 +30,82 @@
                 android:src="@drawable/home_background" />
         </RelativeLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignParentBottom="true"
-            android:layout_weight="1">
-
-            <Button
-                android:id="@+id/button_play"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/play_button"
-                android:textSize="@dimen/home_activity_text_size"
-                android:textColor="@color/blackText"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/button_vertical_margin"
-                android:layout_marginLeft="@dimen/button_horizontal_margin"
-                android:layout_marginRight="@dimen/button_horizontal_margin"
-                android:onClick="startGame"
-                android:background="@drawable/view_style"/>
-
-            <Button
-                android:id="@+id/button_how_to_play"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+                <Button
+                    android:id="@+id/button_play"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/play_button"
+                    android:textSize="@dimen/home_activity_text_size"
+                    android:textColor="@color/blackText"
+                    android:layout_marginLeft="@dimen/button_horizontal_margin"
+                    android:layout_marginRight="@dimen/button_horizontal_margin"
+                    android:onClick="startGame"
+                    android:background="@drawable/view_style"
+                    android:layout_gravity="center_vertical"/>
+            </LinearLayout>
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/how_to_play_button"
-                android:textSize="@dimen/home_activity_text_size"
-                android:textColor="@color/blackText"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/button_horizontal_margin"
-                android:layout_marginRight="@dimen/button_horizontal_margin"
-                android:background="@drawable/view_style"
-                android:onClick="startHowToPlay"/>
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+                <Button
+                    android:id="@+id/button_how_to_play"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/how_to_play_button"
+                    android:textSize="@dimen/home_activity_text_size"
+                    android:textColor="@color/blackText"
+                    android:layout_marginLeft="@dimen/button_horizontal_margin"
+                    android:layout_marginRight="@dimen/button_horizontal_margin"
+                    android:background="@drawable/view_style"
+                    android:onClick="startHowToPlay"
+                    android:layout_gravity="center_vertical"/>
+            </LinearLayout>
 
-            <Button
-                android:id="@+id/button_statistics"
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/statistics_button"
-                android:textSize="@dimen/home_activity_text_size"
-                android:textColor="@color/blackText"
-                android:layout_centerHorizontal="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="@dimen/button_vertical_margin"
-                android:layout_marginLeft="@dimen/button_horizontal_margin"
-                android:layout_marginRight="@dimen/button_horizontal_margin"
-                android:onClick="startStatistics"
-                android:background="@drawable/view_style"/>
-        </RelativeLayout>
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+                <Button
+                    android:id="@+id/button_statistics"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/statistics_button"
+                    android:textSize="@dimen/home_activity_text_size"
+                    android:textColor="@color/blackText"
+                    android:layout_marginLeft="@dimen/button_horizontal_margin"
+                    android:layout_marginRight="@dimen/button_horizontal_margin"
+                    android:onClick="startStatistics"
+                    android:background="@drawable/view_style"
+                    android:layout_gravity="center_vertical"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+                <Button
+                    android:id="@+id/button_sign_out"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/button_sign_out"
+                    android:textSize="@dimen/home_activity_text_size"
+                    android:textColor="@color/blackText"
+                    android:layout_marginLeft="@dimen/button_horizontal_margin"
+                    android:layout_marginRight="@dimen/button_horizontal_margin"
+                    android:onClick="signOutOnClick"
+                    android:background="@drawable/view_style"
+                    android:layout_gravity="center_vertical"/>
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 
     <ProgressBar

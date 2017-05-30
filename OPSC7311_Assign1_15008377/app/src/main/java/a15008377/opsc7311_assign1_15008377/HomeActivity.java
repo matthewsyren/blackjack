@@ -25,6 +25,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -104,7 +105,7 @@ public class HomeActivity extends AppCompatActivity {
                                 if(valid){
                                     //Changes the username to lower case, before checking that the username hasn't been taken by another user
                                     username = username.toLowerCase();
-                                    checkUsername(username);
+                                    //checkUsername(username);
                                 }
                                 else{
                                     //Asks the user to enter a valid username
@@ -128,7 +129,7 @@ public class HomeActivity extends AppCompatActivity {
             displayToast(exc.getMessage());
         }
     }
-
+/*
     //Method checks if the desired username is taken, if it is, the user is prompted for a new username; if the username is free, the user's information is written to the database
     public void checkUsername(final String username){
         try{
@@ -178,7 +179,7 @@ public class HomeActivity extends AppCompatActivity {
         catch(Exception exc){
             displayToast(exc.getMessage());
         }
-    }
+    }*/
 
     //Method checks the Internet connection, and returns true if there is an internet connection, and false if there is no internet connection
     public boolean checkInternetConnection(){
@@ -227,19 +228,6 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-    //Method stores the user's username in the SharedPreferences of the device, which will keep them signed in every time they open the app
-    public void setActiveUsername(String username){
-        try{
-            SharedPreferences preferences = getSharedPreferences("", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putString("username", username);
-            editor.apply();
-        }
-        catch(Exception exc){
-            displayToast(exc.getMessage());
-        }
-    }
-
     //Method opens the How To Play activity
     public void startHowToPlay(View view){
         try{
@@ -255,6 +243,20 @@ public class HomeActivity extends AppCompatActivity {
     public void displayToast(String message){
         try{
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+        }
+        catch(Exception exc){
+            displayToast(exc.getMessage());
+        }
+    }
+
+    //Method signs the user out of their account
+    public void signOutOnClick(View view){
+        try{
+            //Signs the user out of the app and Firebase
+            new User().setActiveUsername(null, this);
+            FirebaseAuth.getInstance().signOut();
+            Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+            startActivity(intent);
         }
         catch(Exception exc){
             displayToast(exc.getMessage());

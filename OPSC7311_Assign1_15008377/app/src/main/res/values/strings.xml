@@ -14,4 +14,12 @@
     <string name="list_view_column2">Username</string>
     <string name="list_view_column3">Win Rate</string>
     <string name="how_to_play">There are 2 players in this version of Blackjack (the dealer and you). The objective of the game is to have your cards add up to more than the dealer\'s cards, whilst still adding up to 21 or less. Each card is worth its face value in points, except for Jacks, Queens and Kings, which are worth 10 points each; and aces, which are worth either 1 or 11 points (they will be worth 11 unless your hand adds up to more than 21, in which case they will be worth 1). \n\nEach player is dealt two cards, with both your cards being face up, while only one of the dealer\'s cards is face up. You then have the chance to add another card to your hand (Hit) or stay with the cards that you already have (Stay). Be careful, though... If you choose to hit and your cards add up to more than 21, you will lose the game. \n\nOnce you choose to stay, its the dealer\'s turn to add cards to his hand. The dealer has no choice with regards to deciding whether to Hit or Stay, if his cards add up to less than 17, he must Hit, but if his cards add up to 17 or more, he must stay. If the dealer\'s hand adds up to over 21, you will win. \n\nOnce both players have had their turns, if neither player has gone over 21, the player with the most points between the 2 players will win. If the points are equal, it is a draw. \n\nYour results will be saved, and you will be able to view your statistics on the Statistics screen. It will show your statistics, as well as a leader board with every player of this game, ranked in order of win rate.</string>
+    <string name="label_email">Email Address</string>
+    <string name="label_username">Username</string>
+    <string name="label_password">Password</string>
+    <string name="label_confirm_password">Confirm Password</string>
+    <string name="button_login">Login</string>
+    <string name="button_create_account">Create Account</string>
+    <string name="button_sign_out">Sign Out</string>
+    <string name="label_forgot_password">Forgot Password</string>
 </resources>
