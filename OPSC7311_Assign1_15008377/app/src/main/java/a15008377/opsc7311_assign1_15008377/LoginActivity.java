@@ -31,16 +31,21 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        try{
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_login);
 
-        if(new User().getActiveUsername(this) != null){
-            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-            startActivity(intent);
+            if(new User().getActiveUsername(this) != null){
+                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                startActivity(intent);
+            }
+
+            firebaseAuth = FirebaseAuth.getInstance();
+            toggleProgressBarVisibility(View.INVISIBLE);
         }
-
-        firebaseAuth = FirebaseAuth.getInstance();
-        toggleProgressBarVisibility(View.INVISIBLE);
+        catch(Exception exc){
+            Toast.makeText(getApplicationContext(), exc.getMessage(), Toast.LENGTH_LONG).show();
+        }
     }
 
     //Method initiates the password recovery feature of this app
@@ -120,7 +125,16 @@ public class LoginActivity extends AppCompatActivity {
 
             String emailAddress = txtEmailAddress.getText().toString();
             String password = txtPassword.getText().toString();
-            signUserIn(emailAddress, password);
+
+            if(emailAddress.isEmpty()){
+                Toast.makeText(getApplicationContext(), "Please enter your email address", Toast.LENGTH_LONG).show();
+            }
+            else if(password.isEmpty()){
+                Toast.makeText(getApplicationContext(), "Please enter your password", Toast.LENGTH_LONG).show();
+            }
+            else{
+                signUserIn(emailAddress, password);
+            }
         }
         catch(Exception exc){
             Toast.makeText(getApplicationContext(), exc.getMessage(), Toast.LENGTH_LONG).show();

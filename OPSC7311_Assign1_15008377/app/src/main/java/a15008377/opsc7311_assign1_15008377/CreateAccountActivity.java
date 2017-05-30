@@ -30,12 +30,17 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_account);
+        try{
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_create_account);
 
-        firebaseAuth = FirebaseAuth.getInstance();
+            firebaseAuth = FirebaseAuth.getInstance();
 
-        toggleProgressBarVisibility(View.INVISIBLE);
+            toggleProgressBarVisibility(View.INVISIBLE);
+        }
+        catch(Exception exc){
+            Toast.makeText(getApplicationContext(), exc.getMessage(), Toast.LENGTH_LONG).show();
+        }
     }
 
     //Method toggles the ProgressBar's visibility
@@ -99,12 +104,23 @@ public class CreateAccountActivity extends AppCompatActivity {
             String emailAddress = txtEmailAddress.getText().toString();
             String username = txtUsername.getText().toString();
             String password = txtPassword.getText().toString();
+            username = username.toLowerCase();
 
-            if(password.equals(txtConfirmPassword.getText().toString())){
-                checkUsername(emailAddress, username, password);
+            if(emailAddress.isEmpty()){
+                Toast.makeText(getApplicationContext(), "Please enter your email address", Toast.LENGTH_LONG).show();
+            }
+            else if(username.isEmpty()){
+                Toast.makeText(getApplicationContext(), "Please enter your desired username", Toast.LENGTH_LONG).show();
+            }
+            else if(password.isEmpty()){
+                Toast.makeText(getApplicationContext(), "Please enter your password", Toast.LENGTH_LONG).show();
+            }
+            if(!password.equals(txtConfirmPassword.getText().toString())){
+                Toast.makeText(getApplicationContext(), "Your passwords don't match, please ensure that they match", Toast.LENGTH_LONG).show();
             }
             else{
-                Toast.makeText(getApplicationContext(), "Your passwords don't match, please ensure that they match", Toast.LENGTH_LONG).show();
+                //Attempts to create account if user input is valid
+                checkUsername(emailAddress, username, password);
             }
         }
         catch(Exception exc){
@@ -112,7 +128,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         }
     }
 
-    //Method checks if the desired username is taken, if it is, the user is prompted for a new username; if the username is free, the user's information is written to the database
+    //Method checks if the desired username is taken. If it is, the user is prompted for a new username; if the username is free, the user's information is written to the database
     public void checkUsername(final String emailAddress, final String username, final String password){
         try{
             if(checkInternetConnection()){
