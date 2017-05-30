@@ -104,6 +104,7 @@
                 android:background="@drawable/view_style"/>
         </LinearLayout>
     </ScrollView>
+
     <ProgressBar
         android:id="@+id/progress_bar_create_account"
         android:layout_height="@dimen/progress_bar_diameter"

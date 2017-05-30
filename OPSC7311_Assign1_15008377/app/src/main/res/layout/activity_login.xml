@@ -26,7 +26,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/label_email_address"
-                android:text="@string/label_username"
+                android:text="@string/label_email"
                 android:textSize="@dimen/home_activity_text_size"
                 android:textColor="@color/blackText"
                 android:layout_gravity="center"/>
