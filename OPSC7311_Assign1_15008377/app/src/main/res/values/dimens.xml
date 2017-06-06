@@ -3,6 +3,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">20dp</dimen>
     <dimen name="button_horizontal_margin">30dp</dimen>
+    <dimen name="edit_text_horizontal_margin">22dp</dimen>
     <dimen name="button_vertical_margin">30dp</dimen>
     <dimen name="home_activity_text_size">40sp</dimen>
     <dimen name="statistics_activity_heading_size">20sp</dimen>

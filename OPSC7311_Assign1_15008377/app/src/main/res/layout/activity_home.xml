@@ -107,12 +107,4 @@
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-
-    <ProgressBar
-        android:id="@+id/progress_bar_home"
-        android:layout_height="@dimen/progress_bar_diameter"
-        android:layout_width="@dimen/progress_bar_diameter"
-        android:indeterminate="true"
-        style="?android:attr/progressBarStyle"
-        android:layout_centerInParent="true" />
 </RelativeLayout>

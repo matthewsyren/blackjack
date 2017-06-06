@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
+import android.icu.text.DisplayContext;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -11,8 +14,13 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -61,32 +69,43 @@ public class LoginActivity extends AppCompatActivity {
     //Method displays an AlertDialog to get a username from the user
     public void displayInputMessage(String message){
         try{
+            //Creates AlertDialog content
             AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-            alertDialog.setTitle(message);
-
-            //Adds EditText to AlertDialog
+            TextView textView = new TextView(this);
+            textView.setText(message);
+            textView.setTypeface(null, Typeface.BOLD);
             final EditText input = new EditText(this);
-            input.setInputType(InputType.TYPE_CLASS_TEXT);
-            alertDialog.setView(input);
+            input.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+
+            //Adds content to AlertDialog
+            LinearLayout relativeLayout = new LinearLayout(this);
+            relativeLayout.setOrientation(LinearLayout.VERTICAL);
+            relativeLayout.addView(textView);
+            relativeLayout.addView(input);
+            alertDialog.setView(relativeLayout);
 
             //Creates OnClickListener for the Dialog message
             DialogInterface.OnClickListener dialogOnClickListener = new DialogInterface.OnClickListener(){
                 @Override
                 public void onClick(DialogInterface dialog, int button) {
                     switch(button){
-                        //Sends the email to the user
                         case AlertDialog.BUTTON_POSITIVE:
                             String emailAddress = input.getText().toString();
                             if(emailAddress.length() > 0){
                                 toggleProgressBarVisibility(View.VISIBLE);
+
+                                //Sends the email to the user if the email address is valid
                                 firebaseAuth.sendPasswordResetEmail(emailAddress).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isSuccessful()) {
+                                            //Displays message telling the user the email has been sent successfully
                                             Toast.makeText(getApplicationContext(), "Email sent", Toast.LENGTH_LONG).show();
                                         }
                                         else{
                                             String exceptionMessage = task.getException().getMessage();
+
+                                            //Displays appropriate error messages based on the exception message details
                                             if(exceptionMessage.contains("There is no user record corresponding to this identifier. The user may have been deleted.")){
                                                 Toast.makeText(getApplicationContext(), "There is no account associated with that email address, please re-enter your email address", Toast.LENGTH_LONG).show();
                                             }
@@ -146,6 +165,14 @@ public class LoginActivity extends AppCompatActivity {
         try{
             ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar_login);
             progressBar.setVisibility(visibility);
+            if(visibility == View.VISIBLE){
+                //Prevents user from clicking other buttons when the ProgressBar is visible. Learnt from https://stackoverflow.com/questions/36918219/how-to-disable-user-interaction-while-progressbar-is-visible-in-android
+                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            }
+            else{
+                //Allows the user to click other buttons when the ProgressBar is invisible
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            }
         }
         catch(Exception exc){
             Toast.makeText(getApplicationContext(), exc.getMessage(), Toast.LENGTH_LONG).show();
@@ -162,13 +189,13 @@ public class LoginActivity extends AppCompatActivity {
                     Log.d("FBA", "signInWithEmail:onComplete:" + task.isSuccessful());
                     if (!task.isSuccessful()) {
                         Log.w("FBA", "signInWithEmail", task.getException());
+                        toggleProgressBarVisibility(View.INVISIBLE);
                         Toast.makeText(LoginActivity.this, "Incorrect email address or password, please try again", Toast.LENGTH_LONG).show();
                     }
                     else{
                         //Takes the user to the HomeActivity once their account has been created
                         getUsername(emailAddress);
                     }
-                    toggleProgressBarVisibility(View.INVISIBLE);
                 }
             });
         }
@@ -187,8 +214,8 @@ public class LoginActivity extends AppCompatActivity {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         User user = snapshot.getValue(User.class);
-                        if(user.getEmailAddress().equals(emailAddress)){
-                            Toast.makeText(getApplicationContext(), snapshot.getKey(), Toast.LENGTH_LONG).show();
+                        if(user.getEmailAddress().equalsIgnoreCase(emailAddress)){
+                            Toast.makeText(getApplicationContext(), "Welcome, " + snapshot.getKey(), Toast.LENGTH_LONG).show();
                             new User().setActiveUsername(snapshot.getKey(), getApplicationContext());
                             Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                             startActivity(intent);

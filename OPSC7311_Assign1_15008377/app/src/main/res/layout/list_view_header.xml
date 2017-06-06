@@ -10,7 +10,8 @@
         android:textStyle="bold"
         android:textSize="@dimen/statistics_activity_text_size"
         android:textColor="@color/blackText"
-        android:paddingLeft="@dimen/statistics_list_view_padding"/>
+        android:paddingStart="@dimen/statistics_list_view_padding"
+        android:paddingEnd="@dimen/statistics_list_view_padding"/>
 
     <TextView
         android:layout_width="wrap_content"

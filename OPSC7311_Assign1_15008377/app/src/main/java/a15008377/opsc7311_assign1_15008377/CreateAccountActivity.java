@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -48,6 +49,14 @@ public class CreateAccountActivity extends AppCompatActivity {
         try{
             ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar_create_account);
             progressBar.setVisibility(visibility);
+            if(visibility == View.VISIBLE){
+                //Prevents user from clicking other buttons when the ProgressBar is visible. Learnt from https://stackoverflow.com/questions/36918219/how-to-disable-user-interaction-while-progressbar-is-visible-in-android
+                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            }
+            else{
+                //Allows the user to click other buttons when the ProgressBar is invisible
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            }
         }
         catch(Exception exc){
             Toast.makeText(getApplicationContext(), exc.getMessage(), Toast.LENGTH_LONG).show();
@@ -85,6 +94,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                         Intent intent = new Intent(CreateAccountActivity.this, HomeActivity.class);
                         startActivity(intent);
                     }
+                    toggleProgressBarVisibility(View.INVISIBLE);
                 }
             });
         }
@@ -104,6 +114,8 @@ public class CreateAccountActivity extends AppCompatActivity {
             String emailAddress = txtEmailAddress.getText().toString();
             String username = txtUsername.getText().toString();
             String password = txtPassword.getText().toString();
+
+            //Converts the username to lower case, as the app requires the username to be lower case
             username = username.toLowerCase();
 
             if(emailAddress.isEmpty()){
@@ -115,12 +127,25 @@ public class CreateAccountActivity extends AppCompatActivity {
             else if(password.isEmpty()){
                 Toast.makeText(getApplicationContext(), "Please enter your password", Toast.LENGTH_LONG).show();
             }
-            if(!password.equals(txtConfirmPassword.getText().toString())){
+            else if(!password.equals(txtConfirmPassword.getText().toString())){
                 Toast.makeText(getApplicationContext(), "Your passwords don't match, please ensure that they match", Toast.LENGTH_LONG).show();
             }
             else{
-                //Attempts to create account if user input is valid
-                checkUsername(emailAddress, username, password);
+                //Ensures that the user's username only contains letters
+                boolean valid = true;
+                for(int i = 0; i < username.length() && valid; i++){
+                    if(!Character.isAlphabetic(username.charAt(i))){
+                        valid = false;
+                    }
+                }
+
+                //Attempts to create the account if the username only contains letters
+                if(valid){
+                    checkUsername(emailAddress, username, password);
+                }
+                else{
+                    Toast.makeText(getApplicationContext(), "Please enter a username that only contains letters", Toast.LENGTH_LONG).show();
+                }
             }
         }
         catch(Exception exc){
@@ -143,13 +168,13 @@ public class CreateAccountActivity extends AppCompatActivity {
                         if(dataSnapshot.exists()){
                             //Displays the prompt for a username again, as the desired username is taken already
                             Toast.makeText(getApplicationContext(), username + " is already taken, please choose another username.", Toast.LENGTH_LONG).show();
+                            toggleProgressBarVisibility(View.INVISIBLE);
                         }
                         else{
                             //Attempts to create the user's account if the username is free
                             createAccount(emailAddress, username, password);
                             databaseReference.removeEventListener(this);
                         }
-                        toggleProgressBarVisibility(View.INVISIBLE);
                     }
                     @Override
                     public void onCancelled(DatabaseError error) {
@@ -157,9 +182,6 @@ public class CreateAccountActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Failed to read data, please check your internet connection", Toast.LENGTH_LONG).show();
                     }
                 });
-            }
-            else{
-                Toast.makeText(getApplicationContext(), "Please enter a username for yourself", Toast.LENGTH_LONG).show();
             }
         }
         catch(Exception exc){

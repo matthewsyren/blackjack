@@ -13,19 +13,22 @@
     tools:context="a15008377.opsc7311_assign1_15008377.CreateAccountActivity">
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fadeScrollbars="false">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
             <TextView
+                android:id="@+id/home_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/label_email_address"
-                android:text="@string/label_email"
                 android:textSize="@dimen/home_activity_text_size"
+                android:text="@string/button_create_account"
                 android:textColor="@color/blackText"
-                android:layout_gravity="center"/>
+                android:textStyle="bold"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/button_vertical_margin"/>
 
             <EditText
                 android:layout_width="match_parent"
@@ -33,17 +36,10 @@
                 android:id="@+id/text_email_address"
                 android:layout_marginBottom="@dimen/activity_vertical_margin"
                 android:textSize="@dimen/home_activity_text_size"
-                android:background="@color/white"
-                android:layout_margin="@dimen/activity_horizontal_margin"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/label_username"
-                android:text="@string/label_username"
-                android:textSize="@dimen/home_activity_text_size"
-                android:textColor="@color/blackText"
-                android:layout_gravity="center"/>
+                android:layout_marginLeft="@dimen/edit_text_horizontal_margin"
+                android:layout_marginRight="@dimen/edit_text_horizontal_margin"
+                android:inputType="textEmailAddress"
+                android:hint="@string/label_email"/>
 
             <EditText
                 android:layout_width="match_parent"
@@ -51,17 +47,10 @@
                 android:id="@+id/text_username"
                 android:layout_marginBottom="@dimen/activity_vertical_margin"
                 android:textSize="@dimen/home_activity_text_size"
-                android:background="@color/white"
-                android:layout_margin="@dimen/activity_horizontal_margin"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/label_password"
-                android:text="@string/label_password"
-                android:textSize="@dimen/home_activity_text_size"
-                android:textColor="@color/blackText"
-                android:layout_gravity="center"/>
+                android:layout_marginLeft="@dimen/edit_text_horizontal_margin"
+                android:layout_marginRight="@dimen/edit_text_horizontal_margin"
+                android:inputType="text"
+                android:hint="@string/label_username" />
 
             <EditText
                 android:layout_width="match_parent"
@@ -69,17 +58,10 @@
                 android:id="@+id/text_password"
                 android:layout_marginBottom="@dimen/activity_vertical_margin"
                 android:textSize="@dimen/home_activity_text_size"
-                android:background="@color/white"
-                android:layout_margin="@dimen/activity_horizontal_margin"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/label_confirm_password"
-                android:text="@string/label_confirm_password"
-                android:textSize="@dimen/home_activity_text_size"
-                android:textColor="@color/blackText"
-                android:layout_gravity="center"/>
+                android:layout_marginLeft="@dimen/edit_text_horizontal_margin"
+                android:layout_marginRight="@dimen/edit_text_horizontal_margin"
+                android:inputType="textPassword"
+                android:hint="@string/label_password"/>
 
             <EditText
                 android:layout_width="match_parent"
@@ -87,9 +69,10 @@
                 android:id="@+id/text_confirm_password"
                 android:layout_marginBottom="@dimen/activity_vertical_margin"
                 android:textSize="@dimen/home_activity_text_size"
-                android:background="@color/white"
-                android:layout_margin="@dimen/activity_horizontal_margin"/>
-
+                android:layout_marginLeft="@dimen/edit_text_horizontal_margin"
+                android:layout_marginRight="@dimen/edit_text_horizontal_margin"
+                android:inputType="textPassword"
+                android:hint="@string/label_confirm_password"/>
             <Button
                 android:id="@+id/button_login"
                 android:layout_width="match_parent"
@@ -97,11 +80,11 @@
                 android:text="@string/button_create_account"
                 android:textSize="@dimen/home_activity_text_size"
                 android:textColor="@color/blackText"
-                android:layout_marginTop="@dimen/button_vertical_margin"
                 android:layout_marginLeft="@dimen/button_horizontal_margin"
                 android:layout_marginRight="@dimen/button_horizontal_margin"
                 android:onClick="createAccountOnClick"
-                android:background="@drawable/view_style"/>
+                android:background="@drawable/view_style"
+                android:layout_weight="1"/>
         </LinearLayout>
     </ScrollView>
 
