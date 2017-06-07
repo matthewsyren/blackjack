@@ -1,25 +1,31 @@
+/**
+ * Author: Matthew Syrén
+ *
+ * Date: 7 June 2017
+ *
+ * Description: This Activity allows the user login to their account for the game. The user can also be taken to the
+ *              CreateAccountActivity from this Activity, and can have an email sent to their email address with a
+ *              link to reset their password.
+ */
+
 package a15008377.opsc7311_assign1_15008377;
 
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Typeface;
-import android.graphics.drawable.GradientDrawable;
-import android.icu.text.DisplayContext;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -139,20 +145,22 @@ public class LoginActivity extends AppCompatActivity {
     //Fetches the user's input and sends the input for authentication
     public void loginOnClick(View view){
         try{
-            EditText txtEmailAddress = (EditText) findViewById(R.id.text_email_address);
-            EditText txtPassword = (EditText) findViewById(R.id.text_password);
+            if(checkInternetConnection()){
+                EditText txtEmailAddress = (EditText) findViewById(R.id.text_email_address);
+                EditText txtPassword = (EditText) findViewById(R.id.text_password);
 
-            String emailAddress = txtEmailAddress.getText().toString();
-            String password = txtPassword.getText().toString();
+                String emailAddress = txtEmailAddress.getText().toString();
+                String password = txtPassword.getText().toString();
 
-            if(emailAddress.isEmpty()){
-                Toast.makeText(getApplicationContext(), "Please enter your email address", Toast.LENGTH_LONG).show();
-            }
-            else if(password.isEmpty()){
-                Toast.makeText(getApplicationContext(), "Please enter your password", Toast.LENGTH_LONG).show();
-            }
-            else{
-                signUserIn(emailAddress, password);
+                if(emailAddress.isEmpty()){
+                    Toast.makeText(getApplicationContext(), "Please enter your email address", Toast.LENGTH_LONG).show();
+                }
+                else if(password.isEmpty()){
+                    Toast.makeText(getApplicationContext(), "Please enter your password", Toast.LENGTH_LONG).show();
+                }
+                else{
+                    signUserIn(emailAddress, password);
+                }
             }
         }
         catch(Exception exc){
@@ -186,9 +194,7 @@ public class LoginActivity extends AppCompatActivity {
             firebaseAuth.signInWithEmailAndPassword(emailAddress, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
-                    Log.d("FBA", "signInWithEmail:onComplete:" + task.isSuccessful());
                     if (!task.isSuccessful()) {
-                        Log.w("FBA", "signInWithEmail", task.getException());
                         toggleProgressBarVisibility(View.INVISIBLE);
                         Toast.makeText(LoginActivity.this, "Incorrect email address or password, please try again", Toast.LENGTH_LONG).show();
                     }
@@ -242,5 +248,24 @@ public class LoginActivity extends AppCompatActivity {
         catch(Exception exc){
             Toast.makeText(getApplicationContext(), exc.getMessage(), Toast.LENGTH_LONG).show();
         }
+    }
+
+    //Method checks the Internet connection, and returns true if there is an internet connection, and false if there is no internet connection
+    public boolean checkInternetConnection(){
+        boolean connected = true;
+        try{
+            ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+            //Displays a message if there is no internet connection
+            if (!(networkInfo != null && networkInfo.isConnected())) {
+                Toast.makeText(getApplicationContext(), "Please check your internet connection...", Toast.LENGTH_LONG).show();
+                connected = false;
+            }
+        }
+        catch(Exception exc){
+            Toast.makeText(getApplicationContext(), exc.getMessage(), Toast.LENGTH_LONG).show();
+        }
+        return connected;
     }
 }

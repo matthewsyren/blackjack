@@ -7,7 +7,6 @@ import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -70,7 +69,6 @@ public class CreateAccountActivity extends AppCompatActivity {
             firebaseAuth.createUserWithEmailAndPassword(emailAddress, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
-                    Log.d("FBA", "createUserWithEmail:onComplete:" + task.isSuccessful());
                     if (!task.isSuccessful()) {
                         String exception = task.getException().getMessage();
                         if(exception.contains("WEAK_PASSWORD")){

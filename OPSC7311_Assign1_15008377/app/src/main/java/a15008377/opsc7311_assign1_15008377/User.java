@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.widget.Toast;
 
+@SuppressWarnings("WeakerAccess")
 public class User {
     private String emailAddress;
     private int gamesPlayed;

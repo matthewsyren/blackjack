@@ -8,6 +8,7 @@
 
 package a15008377.opsc7311_assign1_15008377;
 
+@SuppressWarnings("WeakerAccess")
 public class LeaderBoardDetails {
     private String username;
     private double winRate;
